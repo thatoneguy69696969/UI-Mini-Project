@@ -11,6 +11,8 @@ public partial class Enemy : Creature
 	[Export]
 	public int Points = 10;
 	
+	private TextEdit _health_number;
+	
 	private bool IsAttacking => _sprite.Animation.ToString() == "attack";
 	private bool HasTarget => _hurtBox.GetOverlappingBodies().Any(x => x is Player);
 	
@@ -19,6 +21,8 @@ public partial class Enemy : Creature
 	private AnimatedSprite2D _sprite;
 	private Area2D _hurtBox;
 	private Timer _attackTimer;
+	
+	private AnimationPlayer _animationPlayer;
 	
 	public override void _Ready()
 	{
@@ -32,6 +36,11 @@ public partial class Enemy : Creature
 		_sprite = GetNode<AnimatedSprite2D>("Sprite");
 		_hurtBox = GetNode<Area2D>("HurtBox");
 		_attackTimer = GetNode<Timer>("AttackTimer");
+		
+		_health_number = GetNode<TextEdit>("TextEdit");
+		_health_number.Text = $"{CurrentHealth}";
+		
+		_animationPlayer = GetNode<AnimationPlayer>("Sprite/AnimationPlayer");
 	}
 
 	
@@ -57,6 +66,8 @@ public partial class Enemy : Creature
 	{
 		GD.Print("enemy hit");
 		CurrentHealth -= damage;
+		_health_number.Text = $"{CurrentHealth}";
+		_animationPlayer.Play("flash");
 		if (CurrentHealth <= 0)
 		{
 			EmitSignal(SignalName.EnemyDied, Points);

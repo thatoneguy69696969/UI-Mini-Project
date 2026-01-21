@@ -4,10 +4,14 @@ namespace UIProject.Scripts;
 
 public partial class Player : Creature
 {
+	
 	[Signal]
 	public delegate void LivesChangedEventHandler(int lives);
-
-
+	
+	private ProgressBar _health_bar;
+	private TextEdit _health_number;
+	private AnimationPlayer _animationPlayer;
+	
 	[Export]
 	public int Lives = 3;
 	
@@ -23,8 +27,16 @@ public partial class Player : Creature
 		CurrentHealth = MaxHealth;
 		_startPosition = GlobalPosition;
 		
+		_health_bar = GetNode<ProgressBar>("ProgressBar");
 		_sprite = GetNode<AnimatedSprite2D>("Sprite");
 		_hurtBox = GetNode<Area2D>("HurtBox");
+		_health_number = GetNode<TextEdit>("TextEdit");
+		
+		_health_bar.MaxValue = Lives;
+		_health_bar.Value = Lives;
+		_health_number.Text = $"{Lives}";
+		
+		_animationPlayer = GetNode<AnimationPlayer>("Sprite/AnimationPlayer");
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -47,6 +59,9 @@ public partial class Player : Creature
 	public void TakeDamage(int damage)
 	{
 		CurrentHealth -= damage;
+		_health_bar.Value -= damage;
+		_health_number.Text = $"{CurrentHealth}";
+		_animationPlayer.Play("flash");
 
 		if (CurrentHealth <= 0)
 		{
@@ -61,6 +76,8 @@ public partial class Player : Creature
 				GD.Print($"Player Lives: {Lives}");
 				GlobalPosition = _startPosition;
 				CurrentHealth = MaxHealth;
+				_health_bar.Value = CurrentHealth;
+				_health_number.Text = $"{CurrentHealth}";
 			}
 		}
 		
