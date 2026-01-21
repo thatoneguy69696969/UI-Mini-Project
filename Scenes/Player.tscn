@@ -1,11 +1,17 @@
-[gd_scene load_steps=16 format=3 uid="uid://bfoummb5wftve"]
+[gd_scene load_steps=22 format=3 uid="uid://bfoummb5wftve"]
 
-[ext_resource type="Script" path="res://Scripts/Player.cs" id="1_41cht"]
+[ext_resource type="Script" uid="uid://d24stiu8n08g" path="res://Scripts/Player.cs" id="1_41cht"]
+[ext_resource type="Shader" uid="uid://duxta4n1lr44s" path="res://Scenes/Ogre.gdshader" id="2_gntrk"]
 [ext_resource type="Texture2D" uid="uid://dm3x6b71ac4xt" path="res://Assets/Characters/Player.png" id="2_xt7bx"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_0qv4k"]
 radius = 6.0
 height = 20.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gntrk"]
+shader = ExtResource("2_gntrk")
+shader_parameter/flash_strength = 0.0
+shader_parameter/flash_color = Color(1, 0, 0, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_png0o"]
 atlas = ExtResource("2_xt7bx")
@@ -98,6 +104,58 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="Animation" id="Animation_dewec"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:material:shader_parameter/flash_strength")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_gntrk"]
+resource_name = "flash"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:material:shader_parameter/flash_strength")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, 1.0, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_5ixxa"]
+resource_name = "ogre_flash"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite:material:shader_parameter/flash_strength")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, 1.0, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_5ixxa"]
+_data = {
+&"RESET": SubResource("Animation_dewec"),
+&"flash": SubResource("Animation_gntrk"),
+&"ogre_flash": SubResource("Animation_5ixxa")
+}
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rlnbg"]
 size = Vector2(18, 21)
 
@@ -111,10 +169,17 @@ position = Vector2(0, -10)
 shape = SubResource("CapsuleShape2D_0qv4k")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
+material = SubResource("ShaderMaterial_gntrk")
 position = Vector2(0, -7)
 sprite_frames = SubResource("SpriteFrames_mj7fs")
 animation = &"attack"
 autoplay = "idle"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Sprite"]
+root_node = NodePath("../..")
+libraries = {
+&"": SubResource("AnimationLibrary_5ixxa")
+}
 
 [node name="HurtBox" type="Area2D" parent="."]
 position = Vector2(15, -10.5)
