@@ -64,5 +64,3 @@ offset_right = 40.0
 offset_bottom = 23.0
 
 [connection signal="pressed" from="VBoxContainer/Button3" to="." method="OnPressed"]
-[connection signal="pressed" from="VBoxContainer/Button4" to="." method="OnPressed"]
-[connection signal="pressed" from="VBoxContainer/Button5" to="." method="OnPressed"]

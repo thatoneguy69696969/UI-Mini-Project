@@ -3,28 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://bff8vrk62tyue" path="res://Scenes/TileMap.tscn" id="1_i1qvb"]
 [ext_resource type="PackedScene" uid="uid://bfoummb5wftve" path="res://Scenes/Player.tscn" id="2_7i348"]
 [ext_resource type="PackedScene" uid="uid://v074xqwg3vcg" path="res://Scenes/Ogre.tscn" id="3_4iqyc"]
-
-[sub_resource type="CSharpScript" id="CSharpScript_8rbpu"]
-script/source = "using Godot;
-using System;
-
-public partial class ScoreLabel : Label
-{
-	public override void _Process(double delta)
-	{
-		if (Input.IsActionJustPressed(\"ui_accept\"))
-		{
-			Main.Score += 1;
-			Text = Main.Score.ToString();
-		}
-	}
-}
-
-public static class Main
-{
-	public static int Score = 0;
-}
-"
+[ext_resource type="PackedScene" uid="uid://g041sobf87t2" path="res://pause_manager.tscn" id="4_fuudy"]
 
 [node name="Level" type="Node2D"]
 
@@ -38,23 +17,13 @@ position = Vector2(-166, -10)
 [node name="Camera2D" type="Camera2D" parent="Player"]
 zoom = Vector2(3, 3)
 
-[node name="Label" type="Label" parent="Player"]
-offset_right = 40.0
-offset_bottom = 23.0
-text = "Score:"
-horizontal_alignment = 2
-vertical_alignment = 2
-script = SubResource("CSharpScript_8rbpu")
-
 [node name="Ogre" parent="." instance=ExtResource("3_4iqyc")]
 position = Vector2(-54, -186)
-
-[node name="ProgressBar" type="ProgressBar" parent="Ogre"]
-offset_right = 4.0
-offset_bottom = 27.0
 
 [node name="Ogre2" parent="." instance=ExtResource("3_4iqyc")]
 position = Vector2(113, 91)
 
 [node name="Ogre3" parent="." instance=ExtResource("3_4iqyc")]
 position = Vector2(330, -159)
+
+[node name="Pause" parent="." instance=ExtResource("4_fuudy")]
