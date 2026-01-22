@@ -4,19 +4,24 @@ namespace UIProject.Scripts;
 
 public partial class Player : Creature
 {
-	
 	[Signal]
 	public delegate void LivesChangedEventHandler(int lives);
 	
 	private ProgressBar _health_bar;
 	private TextEdit _health_number;
+	private TextEdit _score;
 	private AnimationPlayer _animationPlayer;
+	
 	
 	[Export]
 	public int Lives = 3;
 	
+	private int Score = 0;
+	
+	
 	private Vector2 _startPosition;
-
+	
+	
 	private bool IsAttacking => _sprite.Animation.ToString() == "attack" && _sprite.IsPlaying();
 
 	private AnimatedSprite2D _sprite;
@@ -31,10 +36,12 @@ public partial class Player : Creature
 		_sprite = GetNode<AnimatedSprite2D>("Sprite");
 		_hurtBox = GetNode<Area2D>("HurtBox");
 		_health_number = GetNode<TextEdit>("TextEdit");
+		_score = GetNode<TextEdit>("Score");
 		
 		_health_bar.MaxValue = Lives;
 		_health_bar.Value = Lives;
 		_health_number.Text = $"{Lives}";
+		_score.Text = $"{Score}";
 		
 		_animationPlayer = GetNode<AnimationPlayer>("Sprite/AnimationPlayer");
 	}
@@ -42,6 +49,8 @@ public partial class Player : Creature
 	public override void _PhysicsProcess(double delta)
 	{
 		var direction = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
+		
+		_score.Text = $"{Score}";
 		
 		UpdateVelocity(direction);
 		
@@ -149,5 +158,11 @@ public partial class Player : Creature
 				enemy.TakeDamage(1);
 			}
 		}
+	}
+	
+	public void UpdateScore(int points) 
+	{
+		Score += points;
+		_score.Text = $"{Score}";
 	}
 }
