@@ -32,11 +32,18 @@ max_value = 3.0
 show_percentage = false
 
 [node name="TextEdit" type="TextEdit" parent="Player"]
-offset_left = -63.0
-offset_top = -108.0
-offset_right = -22.0
-offset_bottom = -82.0
+offset_left = -56.0
+offset_top = -103.0
+offset_right = -15.0
+offset_bottom = -77.0
 text = "Text"
+
+[node name="Score" type="TextEdit" parent="Player"]
+offset_left = -9.0
+offset_top = -104.0
+offset_right = 27.0
+offset_bottom = -76.0
+text = "10"
 
 [node name="Ogre" parent="." instance=ExtResource("3_4iqyc")]
 position = Vector2(-45, -40)
@@ -46,3 +53,7 @@ position = Vector2(321, 228)
 
 [node name="Ogre3" parent="." instance=ExtResource("3_4iqyc")]
 position = Vector2(330, -159)
+
+[connection signal="EnemyDied" from="Ogre" to="Player" method="UpdateScore"]
+[connection signal="EnemyDied" from="Ogre2" to="Player" method="UpdateScore"]
+[connection signal="EnemyDied" from="Ogre3" to="Player" method="UpdateScore"]
